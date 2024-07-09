@@ -25,6 +25,7 @@ color_map = {}
 
 exclude_columns = ['Screener Initials', 'Other Comments']
 
+#func
 def highlight_discrepancies(group, color_fill):
     columns = group.columns
     for col in columns:
