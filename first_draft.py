@@ -21,6 +21,7 @@ ws = wb.active
 # Function to scan for discrepancies and add "FLAG" row
 def scan_and_flag(group):
     columns = group.columns
+    flag_added = False
     for col in columns:
         if col == 'PR Award Number' or col in cols_to_exclude:
             continue
@@ -29,11 +30,16 @@ def scan_and_flag(group):
         for idx in range(1, len(group)):
             current_value = values.iloc[idx]
             if current_value != first_value:
-                # Insert a new row under the cell with discrepancy and mark it with "FLAG"
-                row_idx = group.index[idx]
-                ws.insert_rows(row_idx + 1)  # +1 to insert under the row with discrepancy
-                flag_cell = ws.cell(row=row_idx + 2, column=columns.get_loc(col) + 1)  # +2 for newly inserted row and +1 for 1-based index
-                flag_cell.value = "FLAG"
+                if not flag_added:
+                    # Insert a new row under the cell with the first discrepancy and mark it with "FLAG"
+                    row_idx = group.index[0]  # First row of the group
+                    ws.insert_rows(row_idx + 1)  # +1 to insert under the row with the first discrepancy
+                    flag_cell = ws.cell(row=row_idx + 2, column=columns.get_loc(col) + 1)  # +2 for newly inserted row and +1 for 1-based index
+                    flag_cell.value = "FLAG"
+                    flag_added = True
+                # Clear the current row after marking "FLAG" for the group
+                cell = ws.cell(row=group.index[idx] + 1, column=columns.get_loc(col) + 1)  # +1 for 1-based index
+                cell.value = ""
 
 # Group by PR Award Number
 grouped = df.groupby('PR Award Number')
