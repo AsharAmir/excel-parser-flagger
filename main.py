@@ -16,18 +16,28 @@ grouped = df.groupby('PR Award Number')
 # Define a list of fill colors for highlighting
 colors = [
     "FFFF0000", "FF00FF00", "FF0000FF", "FFFFFF00", "FFFF00FF", "FF00FFFF",
-    "FF800000", "FF808000", "FF008000", "FF800080", "FF008080", "FF000080"
+    "FF800000", "FF808000", "FF008000", "FF800080", "FF008080", "FF000080",
+    "FFFFA500", "FF7FFFD4", "FFDA70D6", "FF00CED1", "FF00FA9A", "FFBA55D3",
+    "FFA52A2A", "FFDEB887", "FF5F9EA0", "FF7FFF00", "FFD2691E", "FF6495ED",
+    "FFDC143C", "FF00FFFF", "FF00008B", "FF008B8B", "FFB8860B", "FFA9A9A9",
+    "FF006400", "FFBDB76B", "FF8B008B", "FF556B2F", "FFFF8C00", "FF9932CC",
+    "FF8B0000", "FFE9967A", "FF8FBC8F", "FF483D8B", "FF2F4F4F", "FFFF1493",
+    "FF00BFFF", "FF696969", "FF696969", "FF1E90FF", "FFB22222", "FF228B22"
 ]
+
 fills = [PatternFill(start_color=color, end_color=color, fill_type="solid") for color in colors]
 
 # Dictionary to keep track of colors used for each PR Award Number
 color_map = {}
 
+# Columns to exclude from highlighting
+exclude_columns = ['Screener Initials', 'Other Comments']
+
 # Function to compare rows and highlight discrepancies
 def highlight_discrepancies(group, color_fill):
     columns = group.columns
     for col in columns:
-        if col == 'PR Award Number':
+        if col == 'PR Award Number' or col in exclude_columns:
             continue
         values = group[col]
         first_value = values.iloc[0]

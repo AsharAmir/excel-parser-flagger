@@ -1,5 +1,6 @@
 import pandas as pd
 import openpyxl
+from openpyxl.styles import PatternFill
 
 # Load the Excel file
 filepath = 'client.xlsx'
@@ -36,6 +37,7 @@ def scan_and_flag(group):
                     ws.insert_rows(row_idx + 1)  # +1 to insert under the row with the first discrepancy
                     flag_cell = ws.cell(row=row_idx + 2, column=columns.get_loc(col) + 1)  # +2 for newly inserted row and +1 for 1-based index
                     flag_cell.value = "FLAG"
+                    flag_cell.fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")  # Yellow highlight
                     flag_added = True
                 # Clear the current row after marking "FLAG" for the group
                 cell = ws.cell(row=group.index[idx] + 1, column=columns.get_loc(col) + 1)  # +1 for 1-based index
